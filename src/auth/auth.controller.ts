@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginResponseDto } from './login-response.dto';
@@ -31,5 +31,13 @@ export class AuthController {
       };
     }
     return { success: false };
+  }
+
+  @Delete('me')
+  @ApiOperation({ summary: 'Cerrar sesión del usuario' })
+  @ApiResponse({ status: 200, description: 'Sesión cerrada correctamente' })
+  logout(): { success: boolean } {
+    // En JWT, el logout se gestiona en el cliente eliminando el token.
+    return { success: true };
   }
 }

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -14,10 +15,12 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 
 @ApiTags('tasks')
+@UseGuards(JwtAuthGuard)
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
