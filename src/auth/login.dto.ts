@@ -7,3 +7,5 @@ export class LoginDto {
   @ApiProperty()
   password: string;
 }
+
+export type UserDto = Pick<LoginDto, 'username'>;

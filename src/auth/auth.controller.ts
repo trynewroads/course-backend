@@ -1,8 +1,19 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Request,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginResponseDto } from './login-response.dto';
-import { LoginDto } from './login.dto';
+import { LoginDto, UserDto } from './login.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -22,22 +33,33 @@ export class AuthController {
     description: 'Credenciales inválidas',
     type: LoginResponseDto,
   })
-  login(@Body() body: LoginDto): LoginResponseDto {
+  login(@Body() body: LoginDto, @Res() res: Response): void {
     const valid = this.authService.validateUser(body.username, body.password);
     if (valid) {
-      return {
-        access_token: this.authService.login(body.username).access_token,
-        success: true,
-      };
+      const { access_token } = this.authService.login(body.username);
+      res.cookie('session', access_token, { httpOnly: true });
+      res.json({ access_token, success: true });
+      return;
     }
-    return { success: false };
+    res.status(401).json({ success: false });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  @ApiOperation({ summary: 'Obtener el usuario logueado' })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuario logueado',
+  })
+  getProfile(@Request() req: { user: UserDto }): UserDto {
+    return req.user;
   }
 
   @Delete('me')
   @ApiOperation({ summary: 'Cerrar sesión del usuario' })
   @ApiResponse({ status: 200, description: 'Sesión cerrada correctamente' })
-  logout(): { success: boolean } {
-    // En JWT, el logout se gestiona en el cliente eliminando el token.
-    return { success: true };
+  logout(@Res() res: Response): void {
+    res.clearCookie('session');
+    res.json({ success: true });
   }
 }

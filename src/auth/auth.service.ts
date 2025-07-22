@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  private readonly users;
+  private readonly users: Array<{ username: string; password: string }>;
 
   constructor(
     private readonly jwtService: JwtService,
@@ -12,15 +12,16 @@ export class AuthService {
   ) {
     this.users = [
       {
-        username: this.configService.get<string>('DEFAULT_USER'),
-        password: this.configService.get<string>('DEFAULT_PASS'),
+        username: this.configService.get<string>('defaultUser')!,
+        password: this.configService.get<string>('defaultPass')!,
       },
     ];
   }
 
   validateUser(username: string, password: string): boolean {
     return this.users.some(
-      (user) => user.username === username && user.password === password,
+      (user: { username: string; password: string }) =>
+        user.username === username && user.password === password,
     );
   }
 
