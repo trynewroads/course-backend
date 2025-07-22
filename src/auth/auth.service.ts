@@ -1,16 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  private readonly users = [
-    {
-      username: process.env.DEFAULT_USER || 'admin',
-      password: process.env.DEFAULT_PASS || '12345678',
-    },
-  ];
+  private readonly users;
 
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {
+    this.users = [
+      {
+        username: this.configService.get<string>('DEFAULT_USER'),
+        password: this.configService.get<string>('DEFAULT_PASS'),
+      },
+    ];
+  }
 
   validateUser(username: string, password: string): boolean {
     return this.users.some(
