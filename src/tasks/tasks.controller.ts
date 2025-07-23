@@ -66,7 +66,6 @@ export class TasksController {
   @ApiOperation({ summary: 'Eliminar una tarea por ID' })
   @ApiParam({ name: 'id', type: Number })
   @ApiResponse({ status: 200, description: 'Tarea eliminada', type: Boolean })
-  @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
   remove(@Param('id') id: string): Promise<void> {
     return this.tasksService.remove(Number(id));
   }
