@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -16,7 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Task } from './task.entity';
+import { CreateTaskDto, Task, UpdateTaskDto } from './task.entity';
 import { TasksService } from './tasks.service';
 
 @ApiTags('tasks')
@@ -28,7 +28,7 @@ export class TasksController {
   @Get()
   @ApiOperation({ summary: 'Obtener todas las tareas' })
   @ApiResponse({ status: 200, description: 'Lista de tareas', type: [Task] })
-  findAll(): Task[] {
+  findAll(): Promise<Task[]> {
     return this.tasksService.findAll();
   }
 
@@ -37,28 +37,28 @@ export class TasksController {
   @ApiParam({ name: 'id', type: Number })
   @ApiResponse({ status: 200, description: 'Tarea encontrada', type: Task })
   @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
-  findOne(@Param('id') id: string): Task | undefined {
+  findOne(@Param('id') id: string): Promise<Task | null> {
     return this.tasksService.findOne(Number(id));
   }
 
   @Post()
   @ApiOperation({ summary: 'Crear una nueva tarea' })
-  @ApiBody({ type: Task })
+  @ApiBody({ type: CreateTaskDto })
   @ApiResponse({ status: 201, description: 'Tarea creada', type: Task })
-  create(@Body() task: Omit<Task, 'id'>): Task {
+  create(@Body() task: CreateTaskDto): Promise<Task> {
     return this.tasksService.create(task);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiOperation({ summary: 'Actualizar una tarea por ID' })
   @ApiParam({ name: 'id', type: Number })
-  @ApiBody({ type: Task })
+  @ApiBody({ type: UpdateTaskDto })
   @ApiResponse({ status: 200, description: 'Tarea actualizada', type: Task })
   @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
   update(
     @Param('id') id: string,
-    @Body() update: Partial<Omit<Task, 'id'>>,
-  ): Task | undefined {
+    @Body() update: UpdateTaskDto,
+  ): Promise<Task | null> {
     return this.tasksService.update(Number(id), update);
   }
 
@@ -67,7 +67,7 @@ export class TasksController {
   @ApiParam({ name: 'id', type: Number })
   @ApiResponse({ status: 200, description: 'Tarea eliminada', type: Boolean })
   @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
-  remove(@Param('id') id: string): boolean {
+  remove(@Param('id') id: string): Promise<void> {
     return this.tasksService.remove(Number(id));
   }
 }

@@ -1,14 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
-
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+@Entity()
 export class Task {
   @ApiProperty()
+  @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
   @ApiProperty()
   title: string;
 
-  @ApiProperty({ required: false })
-  description?: string;
+  @Column()
+  @ApiProperty()
+  description: string;
+
+  @Column({ default: false })
+  @ApiProperty({ default: false })
+  completed: boolean;
+}
+
+export class CreateTaskDto {
+  @ApiProperty()
+  title: string;
+
+  @ApiProperty()
+  description: string;
+}
+
+export class UpdateTaskDto {
+  @ApiProperty()
+  title: string;
+
+  @ApiProperty()
+  description: string;
 
   @ApiProperty()
   completed: boolean;
