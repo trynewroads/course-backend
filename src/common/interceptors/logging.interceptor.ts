@@ -7,9 +7,11 @@ import {
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { ApiConfigService } from '../../config/api-config.service';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
+  constructor(private readonly apiConfig: ApiConfigService) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest<Request>();
     const method: string = req.method;
@@ -22,18 +24,22 @@ export class LoggingInterceptor implements NestInterceptor {
         ? req.cookies.session
         : undefined;
     const start = Date.now();
-    console.log(`Request:`, {
-      method,
-      url,
-      body,
-      session,
-      params,
-      query,
-    });
+    if (this.apiConfig.debugRequest) {
+      console.log(`Request:`, {
+        method,
+        url,
+        body,
+        session,
+        params,
+        query,
+      });
+    }
     return next.handle().pipe(
       tap(() => {
         const duration = Date.now() - start;
-        console.log(`Request to ${method} ${url} completed in ${duration}ms`);
+        if (this.apiConfig.debugRequest) {
+          console.log(`Request to ${method} ${url} completed in ${duration}ms`);
+        }
       }),
     );
   }

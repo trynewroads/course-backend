@@ -112,4 +112,29 @@ describe('Tasks (e2e)', () => {
     const ids = listRes.body.map((t: any) => t.id);
     expect(ids).not.toContain(tareaId);
   });
+
+  it('puede actualizar el status de una tarea', async () => {
+    // Crear tarea
+    const crearRes = await crearTarea(
+      app,
+      cookie,
+      'Tarea con status',
+      'Desc status',
+    );
+    const tareaId = crearRes.body.id;
+    // Actualizar status
+    const updateStatusRes = await request(app.getHttpServer())
+      .patch(`/tasks/${tareaId}/status`)
+      .set('Cookie', cookie)
+      .send({ status: true })
+      .expect(200);
+    expect(updateStatusRes.body.id).toBe(tareaId);
+    expect(updateStatusRes.body.status).toBeTruthy();
+    // Obtener tarea y comprobar status
+    const getRes = await request(app.getHttpServer())
+      .get(`/tasks/${tareaId}`)
+      .set('Cookie', cookie)
+      .expect(200);
+    expect(getRes.body.status).toBeTruthy();
+  });
 });

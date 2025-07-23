@@ -9,6 +9,10 @@ export class ApiConfigService {
     return this.configService.get<number>('PORT')!;
   }
 
+  get debugRequest(): boolean {
+    return this.configService.get<boolean>('DEBUG_REQUEST')!;
+  }
+
   get defaultUser(): string {
     return this.configService.get<string>('DEFAULT_USER')!;
   }

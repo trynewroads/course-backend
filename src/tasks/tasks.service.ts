@@ -2,7 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApiConfigService } from '../config/api-config.service';
-import { CreateTaskDto, Task, UpdateTaskDto } from './task.entity';
+import {
+  CreateTaskDto,
+  Task,
+  UpdateTaskDto,
+  UpdateTaskStatus,
+} from './task.entity';
 
 @Injectable()
 export class TasksService {
@@ -29,6 +34,14 @@ export class TasksService {
 
   async update(id: number, update: UpdateTaskDto): Promise<Task | null> {
     await this.taskRepository.update(id, update);
+    return this.taskRepository.findOneBy({ id });
+  }
+
+  async updateStatus(
+    id: number,
+    status: UpdateTaskStatus,
+  ): Promise<Task | null> {
+    await this.taskRepository.update(id, status);
     return this.taskRepository.findOneBy({ id });
   }
 

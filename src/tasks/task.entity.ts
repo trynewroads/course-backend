@@ -16,7 +16,7 @@ export class Task {
 
   @Column({ default: false })
   @ApiProperty({ default: false })
-  completed: boolean;
+  status: boolean;
 }
 
 export class CreateTaskDto {
@@ -33,7 +33,9 @@ export class UpdateTaskDto {
 
   @ApiProperty()
   description: string;
+}
 
+export class UpdateTaskStatus {
   @ApiProperty()
-  completed: boolean;
+  status: boolean;
 }

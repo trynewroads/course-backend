@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   UseGuards,
@@ -16,7 +17,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateTaskDto, Task, UpdateTaskDto } from './task.entity';
+import {
+  CreateTaskDto,
+  Task,
+  UpdateTaskDto,
+  UpdateTaskStatus,
+} from './task.entity';
 import { TasksService } from './tasks.service';
 
 @ApiTags('tasks')
@@ -60,6 +66,40 @@ export class TasksController {
     @Body() update: UpdateTaskDto,
   ): Promise<Task | null> {
     return this.tasksService.update(Number(id), update);
+  }
+
+  @Put(':id/status')
+  @ApiOperation({ summary: 'Actualizar el estado de una tarea por ID' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiBody({ type: UpdateTaskStatus })
+  @ApiResponse({
+    status: 200,
+    description: 'Estado de la tarea actualizado',
+    type: Task,
+  })
+  @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
+  updateStatus(
+    @Param('id') id: string,
+    @Body() updateStatus: UpdateTaskStatus,
+  ): Promise<Task | null> {
+    return this.tasksService.updateStatus(Number(id), updateStatus);
+  }
+
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Actualizar el estado de una tarea por ID' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiBody({ type: UpdateTaskStatus })
+  @ApiResponse({
+    status: 200,
+    description: 'Estado de la tarea actualizado',
+    type: Task,
+  })
+  @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
+  updateStatusPatch(
+    @Param('id') id: string,
+    @Body() updateStatus: UpdateTaskStatus,
+  ): Promise<Task | null> {
+    return this.tasksService.updateStatus(Number(id), updateStatus);
   }
 
   @Delete(':id')

@@ -2,6 +2,7 @@ import * as Joi from 'joi';
 
 export const envValidationSchema = Joi.object({
   PORT: Joi.number().port().default(3000),
+  DEBUG_REQUEST: Joi.boolean().truthy('true').falsy('false').default(false),
   DEFAULT_USER: Joi.string().default('admin'),
   DEFAULT_PASS: Joi.string().default('12345678'),
   JWT_SECRET: Joi.string().default('secretKey'),
