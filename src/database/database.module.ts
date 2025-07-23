@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../auth/user.entity';
 import { ApiConfigService } from '../config/api-config.service';
 import { ConfigAppModule } from '../config/config-app.module';
 
@@ -19,13 +18,13 @@ import { ConfigAppModule } from '../config/config-app.module';
               username: apiConfig.dbUser,
               password: apiConfig.dbPass,
               database: apiConfig.dbName,
-              entities: [User],
               synchronize: true,
+              autoLoadEntities: true,
             }
           : {
               type: 'sqlite',
               database: ':memory:',
-              entities: [User],
+              autoLoadEntities: true,
               synchronize: true,
             };
       },
