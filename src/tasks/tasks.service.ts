@@ -6,7 +6,7 @@ import {
   CreateTaskDto,
   Task,
   UpdateTaskDto,
-  UpdateTaskStatus,
+  UpdateTaskStatusDto,
 } from './task.entity';
 
 @Injectable()
@@ -39,7 +39,7 @@ export class TasksService {
 
   async updateStatus(
     id: number,
-    status: UpdateTaskStatus,
+    status: UpdateTaskStatusDto,
   ): Promise<Task | null> {
     await this.taskRepository.update(id, status);
     return this.taskRepository.findOneBy({ id });

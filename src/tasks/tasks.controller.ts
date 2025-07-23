@@ -21,7 +21,7 @@ import {
   CreateTaskDto,
   Task,
   UpdateTaskDto,
-  UpdateTaskStatus,
+  UpdateTaskStatusDto,
 } from './task.entity';
 import { TasksService } from './tasks.service';
 
@@ -71,7 +71,7 @@ export class TasksController {
   @Put(':id/status')
   @ApiOperation({ summary: 'Actualizar el estado de una tarea por ID' })
   @ApiParam({ name: 'id', type: Number })
-  @ApiBody({ type: UpdateTaskStatus })
+  @ApiBody({ type: UpdateTaskStatusDto })
   @ApiResponse({
     status: 200,
     description: 'Estado de la tarea actualizado',
@@ -80,7 +80,7 @@ export class TasksController {
   @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
   updateStatus(
     @Param('id') id: string,
-    @Body() updateStatus: UpdateTaskStatus,
+    @Body() updateStatus: UpdateTaskStatusDto,
   ): Promise<Task | null> {
     return this.tasksService.updateStatus(Number(id), updateStatus);
   }
@@ -88,7 +88,7 @@ export class TasksController {
   @Patch(':id/status')
   @ApiOperation({ summary: 'Actualizar el estado de una tarea por ID' })
   @ApiParam({ name: 'id', type: Number })
-  @ApiBody({ type: UpdateTaskStatus })
+  @ApiBody({ type: UpdateTaskStatusDto })
   @ApiResponse({
     status: 200,
     description: 'Estado de la tarea actualizado',
@@ -97,7 +97,7 @@ export class TasksController {
   @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
   updateStatusPatch(
     @Param('id') id: string,
-    @Body() updateStatus: UpdateTaskStatus,
+    @Body() updateStatus: UpdateTaskStatusDto,
   ): Promise<Task | null> {
     return this.tasksService.updateStatus(Number(id), updateStatus);
   }

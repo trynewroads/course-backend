@@ -35,7 +35,7 @@ export class UpdateTaskDto {
   description: string;
 }
 
-export class UpdateTaskStatus {
+export class UpdateTaskStatusDto {
   @ApiProperty()
   status: boolean;
 }
