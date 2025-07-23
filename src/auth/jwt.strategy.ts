@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-jwt';
-import { ApiConfigService } from 'src/config/api-config.service';
+import { ApiConfigService } from '../config/api-config.service';
 import { UserDto } from './login.dto';
 
 function cookieExtractor(req: Request): string | null {

@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
-import { ApiConfigService } from 'src/config/api-config.service';
+import { ApiConfigService } from '../config/api-config.service';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
