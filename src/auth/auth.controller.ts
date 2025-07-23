@@ -33,8 +33,11 @@ export class AuthController {
     description: 'Credenciales inválidas',
     type: LoginResponseDto,
   })
-  login(@Body() body: LoginDto, @Res() res: Response): void {
-    const valid = this.authService.validateUser(body.username, body.password);
+  async login(@Body() body: LoginDto, @Res() res: Response): Promise<void> {
+    const valid = await this.authService.validateUser(
+      body.username,
+      body.password,
+    );
     if (valid) {
       const { access_token } = this.authService.login(body.username);
       res.cookie('session', access_token, { httpOnly: true });
