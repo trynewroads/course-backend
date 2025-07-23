@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-jwt';
+import { ApiConfigService } from 'src/config/api-config.service';
 import { UserDto } from './login.dto';
 
 function cookieExtractor(req: Request): string | null {
@@ -18,11 +18,11 @@ function cookieExtractor(req: Request): string | null {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(configService: ConfigService) {
+  constructor(apiConfigService: ApiConfigService) {
     super({
       jwtFromRequest: cookieExtractor,
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('jwtSecret')!,
+      secretOrKey: apiConfigService.jwtSecret,
     });
   }
 

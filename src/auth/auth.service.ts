@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ApiConfigService } from '../config/api-config.service';
+import { User } from './user.entity';
 
 @Injectable()
 export class AuthService {
@@ -8,12 +11,13 @@ export class AuthService {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly apiConfig: ApiConfigService,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {
     this.users = [
       {
-        username: this.configService.get<string>('defaultUser')!,
-        password: this.configService.get<string>('defaultPass')!,
+        username: this.apiConfig.defaultUser,
+        password: this.apiConfig.defaultPass,
       },
     ];
   }
