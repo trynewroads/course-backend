@@ -55,6 +55,7 @@ export class AuthController {
     description: 'Usuario logueado',
   })
   getProfile(@Request() req: { user: UserDto }): UserDto {
+    console.log(req.user);
     return req.user;
   }
 
