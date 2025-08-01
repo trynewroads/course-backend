@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import * as cookieParser from 'cookie-parser';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
@@ -26,6 +27,7 @@ describe('Tasks (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.use(cookieParser());
     await app.init();
 
     // Login para obtener cookie
