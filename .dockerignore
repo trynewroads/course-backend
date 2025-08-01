@@ -44,12 +44,7 @@ Dockerfile*
 docker-compose*
 .dockerignore
 
-# Testing
-test/
-*.spec.ts
-*.test.ts
-jest.config.js
-jest-e2e.json
+
 
 # Linting and formatting
 .eslintrc*
